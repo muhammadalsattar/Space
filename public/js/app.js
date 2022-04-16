@@ -2,7 +2,6 @@ const socket = io()
 let myPosition;
 const sendMessageForm = document.querySelector('form');
 const messageInput = sendMessageForm.elements.message;
-const formSubmit = sendMessageForm.elements.submit;
 const shareLocationButton = document.querySelector('#send-location');
 const urlParams = new URLSearchParams(location.search);
 const name = urlParams.get('name');
@@ -26,10 +25,10 @@ const roomDataTemplate = (users) => {
     for (let i = 0; i < users.length; i++) {
         const user = users[i];
         const userDiv = `
-        <div class="toast rounded-0" role="alert" aria-live="assertive" aria-atomic="true" style="display: block !important; margin: .8em; width: 95% !important;">
+        <div class="toast rounded-0" role="alert" aria-live="assertive" aria-atomic="true" style="display: block !important; margin: .3em; width: 95% !important;">
             <div class="toast-header">
-                <img src="/assets/filled-circle.png" class="rounded me-2" alt="active status" style="width: .8em;">
-                <strong class="me-auto">${user.name}</strong>
+                <img src="/assets/filled-circle.png" class="rounded me-2" alt="active status" style="width: 1em;">
+                <h4 class="me-auto">${user.name}</h4>
             </div>
         </div>
         `;
@@ -49,20 +48,12 @@ socket.emit('join', { name, room}, (error) => {
         location.href = '/';
     }
 });
-messageInput.addEventListener('keyup', (e) => {
-    if (messageInput.value.length > 0) {
-        formSubmit.disabled = false;
-    } else {
-        formSubmit.disabled = true;
-    }
-});
 document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault()
     const message = e.target.elements.message.value
     socket.emit('sendMessage', message, ()=>{
         messageInput.value = '';
         messageInput.focus();
-        formSubmit.disabled = true;
     });
 })
 
